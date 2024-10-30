@@ -4,13 +4,12 @@ import React from 'react';
 interface NotepadFieldProps {
     text: string;
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    resultsOnly: { line: string; result?: string }[];
+    resultsOnly: { line: string; result?: string };
 }
 
 const NotepadField: React.FC<NotepadFieldProps> = ({ text, handleChange, resultsOnly }) => {
     return (
         <Paper
-            elevation={3}
             sx={{
                 position: 'relative',
                 width: '100%',
@@ -44,17 +43,17 @@ const NotepadField: React.FC<NotepadFieldProps> = ({ text, handleChange, results
         />
         {/* Overlay for results only */}
         <Box
-            position="absolute"
-            top={0}
-            left={0}
-            right={0}
-            bottom={0}
-            padding={2}
-            pointerEvents="none"
-            fontSize="1rem"
-            lineHeight="1.5"
-            color="text.secondary"
         sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            padding: 2,
+            pointerEvents: "none",
+            fontSize: "1rem",
+            lineHeight: "1.5",
+            color: "text.secondary",
             whiteSpace: 'pre-wrap',
             fontFamily: 'Roboto Mono, monospace',
             zIndex: 1,
