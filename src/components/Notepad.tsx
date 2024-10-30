@@ -28,7 +28,7 @@ const Notepad: React.FC = () => {
         // Evaluate right side with scope
         const evaluatedValue = evaluate(valueExpr, scopeRef.current);
         scopeRef.current[variable] = evaluatedValue;
-        return `${variable} = ${evaluatedValue}`;
+        return `${evaluatedValue}`;
       } else {
         return evaluateExpression(expression);
       }
