@@ -1,12 +1,15 @@
 // src/App.jsx
-import React from 'react';
-import Notepad from './components/Notepad'
+import Notepad from './pages/Notepad'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const App = () => {
   return (
-    <div>
-      <Notepad />
-    </div>
+    <Router>
+        <Routes>
+            <Route path="/new-post" element={<Notepad/>}/>
+            <Route path="/" element={<div/>}/>
+        </Routes>
+    </Router>
   );
 };
 
