@@ -14,11 +14,13 @@
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.1.5",
     "@mui/material": "^6.1.5",
+    "firebase": "^11.0.1",
     "mathjs": "^13.2.0",
     "prismjs": "^1.29.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.27.0"
+    "react-router-dom": "^6.27.0",
+    "react-transition-group": "^4.4.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
