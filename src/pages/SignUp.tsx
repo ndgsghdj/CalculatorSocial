@@ -28,9 +28,9 @@ const SignUp: React.FC = () => {
         }
         try {
             const userCredential = await signUp(email, password)
-            navigate("/new-post") // Change to /home when implemented
+            navigate('/new-post')
         } catch (error) {
-            setError('Failed to log in')
+            setError(`${error}`)
             console.log("Error:", error)
         }
     }
@@ -58,7 +58,7 @@ const SignUp: React.FC = () => {
                 }}
             >
                 <Typography variant="h5" align="center" sx={{ mb: 2, color: 'text.primary' }}>
-                    Sign In
+                    Sign Up
                 </Typography>
                 <TextField
                     variant="outlined"
@@ -126,7 +126,7 @@ const SignUp: React.FC = () => {
                         color: 'text.secondary',
                     }}
                 >
-                    Don't have an account? <a href="/signup" style={{ color: '#bd93f9' }}>Sign Up</a>
+                    Already have an account? <a href="/login" style={{ color: '#bd93f9' }}>Sign In</a>
                 </Typography>
             </Paper>
         </Box>

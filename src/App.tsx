@@ -39,7 +39,7 @@ const Main = () => {
                     <Route path="/signup" element={<SignUp/>}/>
                     <Route element={<PrivateRoute/>}>
                         <Route element={<Layout />}>
-                            <Route path="/" element={<div/>}/>
+                            <Route path="/" element={<div/>}/> // Change when implemented
                             <Route path="/new-post" element={<Notepad />} />
                         </Route>
                     </Route>

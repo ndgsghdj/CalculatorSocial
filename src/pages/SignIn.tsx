@@ -8,6 +8,7 @@ import {
     Typography,
     Paper,
     Alert,
+    Link,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,7 +24,7 @@ const SignIn: React.FC = () => {
     const handleLogin = async () => {
         try {
             const userCredential = await login(email, password)
-            navigate("/new-post") // Change to /home when implemented
+            navigate("/") // Change to /home when implemented
         } catch (error) {
             setError('Failed to log in')
             console.log("Error:", error)
@@ -106,7 +107,7 @@ const SignIn: React.FC = () => {
                         color: 'text.secondary',
                     }}
                 >
-                    Don't have an account? <a href="/signup" style={{ color: '#bd93f9' }}>Sign Up</a>
+                    Don't have an account? <Link href="/signup" style={{ color: '#bd93f9' }}>Sign Up</Link>
                 </Typography>
             </Paper>
         </Box>

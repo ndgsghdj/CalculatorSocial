@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.tsx'
 import { createTheme, ThemeProvider } from "@mui/material";
 import { AuthProvider } from './providers/AuthContext.tsx';
+import { PostProvider } from './providers/PostContext.tsx';
 
 const kanagawaTheme = createTheme({
     palette: {
@@ -79,7 +80,9 @@ createRoot(document.getElementById('root')!).render(
     <StrictMode>
     <ThemeProvider theme={kanagawaTheme}>
     <AuthProvider>
+    <PostProvider>
     <App />
+    </PostProvider>
     </AuthProvider>
     </ThemeProvider>
     </StrictMode>,
