@@ -57,7 +57,6 @@ const NotepadField: React.FC<NotepadFieldProps> = ({ text, handleChange, results
             whiteSpace: 'pre-wrap',
             fontFamily: 'Roboto Mono, monospace',
             zIndex: 1,
-            pointerEvents: 'none',
         }}
         >
         {resultsOnly.map((item, index) => (

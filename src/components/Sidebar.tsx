@@ -25,7 +25,7 @@ const Sidebar = () => {
         <List>
         {menuItems.map((item) => (
             <ListItemButton onClick={() => navigate(item.path)} key={item.text}>
-            <ListItemIcon sx={{ color: 'secondary.main' }}>
+            <ListItemIcon sx={{ color: 'primary.main' }}>
             {item.icon}
             </ListItemIcon>
             <ListItemText primary={item.text} />

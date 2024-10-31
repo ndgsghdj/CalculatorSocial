@@ -88,7 +88,7 @@ const Notepad: React.FC = () => {
         color="text.primary"
         padding={2}
         >
-        <Typography variant="h4" component="h1" gutterBottom color="secondary">
+        <Typography variant="h4" component="h1" gutterBottom color="text.primary">
         New Post
         </Typography>
 
