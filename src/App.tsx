@@ -7,6 +7,9 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './App.css';
 import { useAuth } from './providers/AuthContext';
 import SignUp from './pages/SignUp';
+import HomePage from './pages/Home';
+import { PostProvider } from './providers/PostContext';
+import ProfilePage from './pages/Profile';
 
 const PrivateRoute = () => {
     const { user } = useAuth();
@@ -34,16 +37,19 @@ const Main = () => {
                 classNames="fade"
                 timeout={300}
             >
+                <PostProvider>
                 <Routes location={location}>
                     <Route path="/login" element={<SignIn/>}/>
                     <Route path="/signup" element={<SignUp/>}/>
                     <Route element={<PrivateRoute/>}>
                         <Route element={<Layout />}>
-                            <Route path="/" element={<div/>}/> // Change when implemented
                             <Route path="/new-post" element={<Notepad />} />
+                            <Route path="/" element={<HomePage/>}/> 
+                            <Route path="/users/:username" element={<ProfilePage/>}/> 
                         </Route>
                     </Route>
                 </Routes>
+                </PostProvider>
             </CSSTransition>
         </TransitionGroup>
     );

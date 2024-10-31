@@ -4,7 +4,6 @@ import './index.css'
 import App from './App.tsx'
 import { createTheme, ThemeProvider } from "@mui/material";
 import { AuthProvider } from './providers/AuthContext.tsx';
-import { PostProvider } from './providers/PostContext.tsx';
 
 const kanagawaTheme = createTheme({
     palette: {
@@ -18,9 +17,9 @@ const kanagawaTheme = createTheme({
             disabled: '#a6a6a6',
         },
         primary: {
-            main: '#50fa7b', // Green
-            light: '#69f0a3', // Light green
-            dark: '#3c9c4a', // Dark green
+            main: '#8ba4b0', // Green
+            light: '#c1d6db', // Light green
+            dark: '#4b6a73', // Dark green
             contrastText: '#282c34', // Text color on primary button
         },
         secondary: {
@@ -48,10 +47,18 @@ const kanagawaTheme = createTheme({
             contrastText: '#282c34',
         },
         success: {
-            main: '#50fa7b', // Green (can be same as primary)
-            light: '#69f0a3', // Light green (can be same as primary light)
-            dark: '#3c9c4a', // Dark green (can be same as primary dark)
+            main: '#50fa7b', // Green (same as primary)
+            light: '#69f0a3', // Light green (same as primary light)
+            dark: '#3c9c4a', // Dark green (same as primary dark)
             contrastText: '#282c34',
+        },
+        divider: '#383838', // Divider color
+        action: {
+            active: '#f8f8f2',
+            hover: '#3c3f41',
+            selected: '#505357',
+            disabled: '#5e5e5e',
+            disabledBackground: '#303030',
         },
     },
     typography: {
@@ -64,14 +71,30 @@ const kanagawaTheme = createTheme({
             fontWeight: 700,
             color: '#f8f8f2',
         },
+        h3: {
+            fontWeight: 600,
+            color: '#f8f8f2',
+        },
+        h4: {
+            fontWeight: 600,
+            color: '#f8f8f2',
+        },
         body1: {
             color: '#f8f8f2',
         },
         body2: {
             color: '#7fdbca',
         },
+        button: {
+            fontWeight: 500,
+            color: '#f8f8f2',
+        },
+        caption: {
+            color: '#a6a6a6',
+        },
     },
 });
+
 
 export default kanagawaTheme;
 
@@ -80,9 +103,7 @@ createRoot(document.getElementById('root')!).render(
     <StrictMode>
     <ThemeProvider theme={kanagawaTheme}>
     <AuthProvider>
-    <PostProvider>
     <App />
-    </PostProvider>
     </AuthProvider>
     </ThemeProvider>
     </StrictMode>,

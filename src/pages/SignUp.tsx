@@ -17,6 +17,7 @@ const SignUp: React.FC = () => {
     const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('')
     const [error, setError] = useState<string | null>(null)
@@ -27,7 +28,7 @@ const SignUp: React.FC = () => {
             return
         }
         try {
-            const userCredential = await signUp(email, password)
+            const userCredential = await signUp(email, username, password)
             navigate('/new-post')
         } catch (error) {
             setError(`${error}`)
@@ -66,6 +67,21 @@ const SignUp: React.FC = () => {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    fullWidth
+                    sx={{ mb: 2 }}
+                    InputLabelProps={{
+                        style: { color: '#7fdbca' }, // Change label color
+                    }}
+                    InputProps={{
+                        style: { color: '#f8f8f2' }, // Change input text color
+                    }}
+                />
+                <TextField
+                    variant="outlined"
+                    label="Username"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     fullWidth
                     sx={{ mb: 2 }}
                     InputLabelProps={{

@@ -9,8 +9,12 @@ import {
 } from 'firebase/auth';
 
 import {
-  doc,
-  setDoc
+    collection,
+    doc,
+    getDocs,
+    query,
+    setDoc,
+    where
 } from "firebase/firestore"
 
 interface AuthContextType {
@@ -18,7 +22,7 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  signUp: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, username: string, password: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,6 +32,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const storedUser = localStorage.getItem('user');
     return storedUser ? JSON.parse(storedUser) : null;
   });
+  const [userDetails, setUserDetails] = useState(() => {
+      const storedUserDetails = localStorage.getItem('userDetails')
+      return storedUserDetails ? JSON.parse(storedUserDetails) : null;
+  })
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -44,6 +52,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     return () => unsubscribe();
   }, []);
+
+  const getCurrentUser = async (userId: string) => {
+      setLoading(true)
+      try {
+          const q = query(
+              collection(db, 'users'),
+              where('uid', '==', userId)
+          );
+          const querySnapshot = await getDocs(q);
+          const currentUser = querySnapshot.docs[0]
+          setUserDetails(currentUser)
+      } catch (err) {
+          console.error(err)
+      } finally {
+          setLoading(false)
+      }
+  }
 
   const login = async (email: string, password: string) => {
     setLoading(true);
@@ -64,7 +89,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(false);
   };
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (email: string, username: string, password: string) => {
     setLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -75,6 +100,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         uid: user.uid,
         email: user.email,
         createdAt: new Date(),
+        username: username
         // Add other fields as necessary
       });
 

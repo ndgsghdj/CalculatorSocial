@@ -40,7 +40,7 @@ const Notepad: React.FC = () => {
 
     const handleSubmit = async () => {
         try {
-            await addPost(title, submissionText);  // Make sure this is awaited if it returns a promise
+            await addPost(title, submissionText, scopeRef.current);  // Make sure this is awaited if it returns a promise
             alert('Submitted!')
             navigate('/')            
 

@@ -1,16 +1,25 @@
 // Sidebar.js
 import { Box, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
-import { Home, Person, Notifications, Message, Settings, Add } from '@mui/icons-material';
+import { Home, Person, Settings, Add, Logout } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../providers/AuthContext';
 
 const Sidebar = () => {
     const navigate = useNavigate();
+
+    const { user, logout } = useAuth();
+
     const menuItems = [
         { text: 'Home', icon: <Home />, path: "/" },
-        { text: 'Profile', icon: <Person />, path: "/profile"},
+        { text: 'Profile', icon: <Person />, path: `/users/${user}`},
         { text: 'Settings', icon: <Settings />, path: "/settings" },
         { text: 'New Post', icon: <Add/>, path: "/new-post"}
     ];
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    }
 
     return (
         <Box
@@ -46,6 +55,12 @@ const Sidebar = () => {
                         <ListItemText primary={item.text} />
                     </ListItemButton>
                 ))}
+                <ListItemButton onClick={() => handleLogout()}>
+                    <ListItemIcon sx={{ color: 'primary.main' }}>
+                        <Logout/>
+                    </ListItemIcon>
+                    <ListItemText primary="Log Out" />
+                </ListItemButton>
             </List>
         </Box>
     );
