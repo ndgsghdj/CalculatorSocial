@@ -47,17 +47,6 @@ CalculatorSocial is a unique social media application that combines the function
    npm start
    ```
 
-### Environment Variables
-
-Ensure to set up the following environment variables:
-
-- `REACT_APP_FIREBASE_API_KEY`
-- `REACT_APP_FIREBASE_AUTH_DOMAIN`
-- `REACT_APP_FIREBASE_PROJECT_ID`
-- `REACT_APP_FIREBASE_STORAGE_BUCKET`
-- `REACT_APP_FIREBASE_MESSAGING_SENDER_ID`
-- `REACT_APP_FIREBASE_APP_ID`
-
 ### Usage
 
 1. **Sign Up** to create an account.
@@ -74,7 +63,6 @@ CalculatorSocial/
 │   ├── pages/              # App pages (Home, Profile, New Post)
 │   ├── App.tsx             # Main app component
 │   ├── main.tsx            # Entry point
-├── .env                    # Environment variables
 ├── README.md               # Project documentation
 └── package.json            # Dependencies and scripts
 ```
