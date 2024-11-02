@@ -1,19 +1,17 @@
-// Sidebar.js
 import { Box, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
-import { Home, Person, Settings, Add, Logout } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom'
+import { Home, Person, Add, Logout } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../providers/AuthContext';
 
 const Sidebar = () => {
     const navigate = useNavigate();
+    const { userDetails, logout } = useAuth();
 
-    const { user, logout } = useAuth();
-
+    // Define menu items
     const menuItems = [
         { text: 'Home', icon: <Home />, path: "/" },
-        { text: 'Profile', icon: <Person />, path: `/users/${user}`},
-        { text: 'Settings', icon: <Settings />, path: "/settings" },
-        { text: 'New Post', icon: <Add/>, path: "/new-post"}
+        { text: 'Profile', icon: <Person />, path: userDetails ? `/users/${userDetails.username}` : '/login' },
+        { text: 'New Post', icon: <Add />, path: "/new-post" }
     ];
 
     const handleLogout = () => {
@@ -30,34 +28,38 @@ const Sidebar = () => {
                 boxShadow: 3,
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'center', // Center items horizontally
-                justifyContent: 'flex-start', // Start at the top
-                paddingTop: 2 // Add some padding at the top
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                paddingTop: 2
             }}
         >
             <Typography 
-                variant="h5" // Use a larger variant for better visibility
+                variant="h5"
                 sx={{ 
-                    fontWeight: 'bold', // Make the text bold
-                    marginBottom: 2, // Add space below the title
-                    textAlign: 'center', // Center the text
-                    color: 'primary.main' // Change color to primary theme color
+                    fontWeight: 'bold',
+                    marginBottom: 2,
+                    textAlign: 'center',
+                    color: 'primary.main'
                 }}
             >
                 CalcSocial
             </Typography>
-            <List sx={{ width: '100%' }}> {/* Ensure list takes full width */}
+            <List sx={{ width: '100%' }}>
                 {menuItems.map((item) => (
-                    <ListItemButton onClick={() => navigate(item.path)} key={item.text}>
+                    <ListItemButton 
+                        onClick={() => navigate(item.path)} 
+                        key={item.text}
+                        disabled={item.path === '/login' && !userDetails} // Disable if not logged in and trying to access profile
+                    >
                         <ListItemIcon sx={{ color: 'primary.main' }}>
                             {item.icon}
                         </ListItemIcon>
                         <ListItemText primary={item.text} />
                     </ListItemButton>
                 ))}
-                <ListItemButton onClick={() => handleLogout()}>
+                <ListItemButton onClick={handleLogout}>
                     <ListItemIcon sx={{ color: 'primary.main' }}>
-                        <Logout/>
+                        <Logout />
                     </ListItemIcon>
                     <ListItemText primary="Log Out" />
                 </ListItemButton>

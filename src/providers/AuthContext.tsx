@@ -7,15 +7,14 @@ import {
   User,
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
-
 import {
-    collection,
-    doc,
-    getDocs,
-    query,
-    setDoc,
-    where
-} from "firebase/firestore"
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where
+} from "firebase/firestore";
 
 interface AuthContextType {
   user: User | null;
@@ -23,6 +22,16 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   signUp: (email: string, username: string, password: string) => Promise<void>;
+  userDetails: UserDetailsType | null;
+}
+
+interface UserDetailsType {
+  uid: string;
+  email: string;
+  createdAt: Date;
+  username: string;
+  bio: string;
+  // Add other fields as necessary
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -32,19 +41,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const storedUser = localStorage.getItem('user');
     return storedUser ? JSON.parse(storedUser) : null;
   });
-  const [userDetails, setUserDetails] = useState(() => {
-      const storedUserDetails = localStorage.getItem('userDetails')
-      return storedUserDetails ? JSON.parse(storedUserDetails) : null;
-  })
+  
+  const [userDetails, setUserDetails] = useState<UserDetailsType | null>(() => {
+    const storedUserDetails = localStorage.getItem('userDetails');
+    return storedUserDetails ? JSON.parse(storedUserDetails) : null;
+  });
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
+        getCurrentUser(user.uid);
         localStorage.setItem('user', JSON.stringify(user));
       } else {
         setUser(null);
+        setUserDetails(null);
         localStorage.removeItem('user');
       }
       setLoading(false);
@@ -54,20 +67,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const getCurrentUser = async (userId: string) => {
-      setLoading(true)
-      try {
-          const q = query(
-              collection(db, 'users'),
-              where('uid', '==', userId)
-          );
-          const querySnapshot = await getDocs(q);
-          const currentUser = querySnapshot.docs[0]
-          setUserDetails(currentUser)
-      } catch (err) {
-          console.error(err)
-      } finally {
-          setLoading(false)
+    setLoading(true);
+    try {
+      const q = query(
+        collection(db, 'users'),
+        where('uid', '==', userId)
+      );
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        const currentUser = querySnapshot.docs[0].data() as UserDetailsType;
+        setUserDetails(currentUser);
+        localStorage.setItem('userDetails', JSON.stringify(currentUser));
+      } else {
+        setUserDetails(null);
       }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   }
 
   const login = async (email: string, password: string) => {
@@ -85,7 +103,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(true);
     await signOut(auth);
     setUser(null);
+    setUserDetails(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('userDetails');
     setLoading(false);
   };
 
@@ -100,7 +120,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         uid: user.uid,
         email: user.email,
         createdAt: new Date(),
-        username: username
+        username: username,
+        bio: ""
         // Add other fields as necessary
       });
 
@@ -114,7 +135,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, signUp }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, signUp, userDetails }}>
       {children}
     </AuthContext.Provider>
   );

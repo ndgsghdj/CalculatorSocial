@@ -10,6 +10,8 @@ import SignUp from './pages/SignUp';
 import HomePage from './pages/Home';
 import { PostProvider } from './providers/PostContext';
 import ProfilePage from './pages/Profile';
+import EditProfile from './pages/EditProfile';
+import { UserProvider } from './providers/UserContext';
 
 const PrivateRoute = () => {
     const { user } = useAuth();
@@ -37,6 +39,7 @@ const Main = () => {
                 classNames="fade"
                 timeout={300}
             >
+                <UserProvider>
                 <PostProvider>
                 <Routes location={location}>
                     <Route path="/login" element={<SignIn/>}/>
@@ -46,10 +49,12 @@ const Main = () => {
                             <Route path="/new-post" element={<Notepad />} />
                             <Route path="/" element={<HomePage/>}/> 
                             <Route path="/users/:username" element={<ProfilePage/>}/> 
+                            <Route path="/edit-profile" element={<EditProfile/>}/>
                         </Route>
                     </Route>
                 </Routes>
                 </PostProvider>
+                </UserProvider>
             </CSSTransition>
         </TransitionGroup>
     );

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { collection, addDoc, getDocs, query, where, orderBy, Timestamp, doc, getDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where, orderBy, Timestamp, doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import { useAuth } from './AuthContext';
 
@@ -19,7 +19,8 @@ export interface UserPost extends Post {
 export interface PostContextType {
     addPost: (title: string, content: string, scope) => Promise<void>;
     fetchUserPosts: (username: string) => Promise<void>;
-    fetchFeedPosts: (lastVisiblePost?: UserPost) => Promise<void>;
+    fetchFeedPosts: () => Promise<void>; // Updated to have the same signature as others
+    deleteUserPosts: (id: string) => Promise<void>;
     userPosts: UserPost[];
     feedPosts: UserPost[];
     loading: boolean;
@@ -51,15 +52,15 @@ export const PostProvider: React.FC<PostProviderProps> = ({ children }) => {
         setError(null);
 
         try {
-            const userDocRef = doc(db, 'users', userId)
-            const userDoc = await getDoc(userDocRef)
+            const userDocRef = doc(db, 'users', userId);
+            const userDoc = await getDoc(userDocRef);
 
             if (!userDoc.exists()) {
-                setError("User not found")
+                setError("User not found");
                 return;
             }
 
-            const { username } = userDoc.data() as { username: string }
+            const { username } = userDoc.data() as { username: string };
 
             await addDoc(collection(db, 'posts'), {
                 title,
@@ -69,6 +70,8 @@ export const PostProvider: React.FC<PostProviderProps> = ({ children }) => {
                 scope,
                 createdAt: Timestamp.fromDate(new Date()),
             });
+
+            await fetchFeedPosts(); // Optionally refetch feed after adding a post
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Error adding post');
         } finally {
@@ -77,15 +80,11 @@ export const PostProvider: React.FC<PostProviderProps> = ({ children }) => {
     };
 
     const fetchUserPosts = async (username: string): Promise<void> => {
-
         setLoading(true);
         setError(null);
 
         try {
-            const q = query(
-                collection(db, 'posts'),
-                where('username', '==', username),
-            );
+            const q = query(collection(db, 'posts'), where('username', '==', username));
             const querySnapshot = await getDocs(q);
             const posts = querySnapshot.docs.map((doc) => ({
                 id: doc.id,
@@ -99,6 +98,42 @@ export const PostProvider: React.FC<PostProviderProps> = ({ children }) => {
             setLoading(false);
         }
     };
+
+    const deleteUserPosts = async (id: string): Promise<void> => {
+        if (!userId) {
+            setError("User is not authenticated")
+            return;
+        }
+
+        setLoading(true)
+        setError(null)
+
+        try {
+            const postRef = doc(db, 'posts', id);
+            const postDoc = await getDoc(postRef)
+
+            if (!postDoc.exists()) {
+                setError("Post not found");
+                return;
+            }
+
+            const postData = postDoc.data() as Post;
+
+            if (postData.userId !== userId) {
+                setError("You are not authorised to delete this post!")
+                return;
+            }
+
+            await deleteDoc(postRef);
+            setUserPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
+            setFeedPosts((prevPosts) => prevPosts.filter((post) => post.id !== id))
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Error deleting post')
+            return;
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const fetchFeedPosts = async (): Promise<void> => {
         setLoading(true);
@@ -120,13 +155,18 @@ export const PostProvider: React.FC<PostProviderProps> = ({ children }) => {
     };
 
     useEffect(() => {
-        fetchFeedPosts();
-    }, []);
+        const fetchPostsOnMount = async () => {
+            await fetchFeedPosts(); // Call fetchFeedPosts on mount
+        };
+
+        fetchPostsOnMount().catch((err) => console.error(err)); // Handle potential errors
+    }, []); // Only run once on mount
 
     const value: PostContextType = {
         addPost,
         fetchUserPosts,
         fetchFeedPosts,
+        deleteUserPosts,
         userPosts,
         feedPosts,
         loading,
