@@ -1,50 +1,84 @@
-# React + TypeScript + Vite
+# CalculatorSocial
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+CalculatorSocial is a unique social media application that combines the functionality of a traditional social platform with a built-in notepad calculator. Users can create posts with content that includes real-time mathematical calculations. The calculated results appear inline, allowing users to showcase their creativity, solve problems, and share ideas in a whole new way.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **User Profiles**: Each user has a personal profile displaying their posts.
+- **Notepad Calculator**: Post content that includes mathematical expressions with inline calculation results.
+- **Social Feed**: View a feed of posts from other users, with optimized loading for high volumes.
+- **Firebase Integration**: Utilizes Firebase Firestore for post storage and retrieval.
+- **Real-Time Calculation**: Posts display calculated results on the right side of each line, updated as content is typed.
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Frontend**: React with MUI Material for modern UI components
+- **Backend**: Firebase Firestore for real-time database functionality
+- **Utilities**: TypeScript for type-safe code, Math.js for mathematical expression parsing
 
-- Configure the top-level `parserOptions` property like this:
+## Getting Started
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Prerequisites
+
+- Node.js (v14+)
+- Firebase account with Firestore set up
+- Optional: VS Code or your preferred code editor
+
+### Installation
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/ndgsghdj/CalculatorSocial.git
+   cd CalculatorSocial
+   ```
+
+2. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Configure Firebase**:
+   - Go to the Firebase Console and set up a new project.
+   - Enable Firestore in your project.
+   - Obtain the Firebase configuration and set it up in the project (e.g., in `.env` or Firebase config files).
+
+4. **Run the App**:
+   ```bash
+   npm start
+   ```
+
+### Environment Variables
+
+Ensure to set up the following environment variables:
+
+- `REACT_APP_FIREBASE_API_KEY`
+- `REACT_APP_FIREBASE_AUTH_DOMAIN`
+- `REACT_APP_FIREBASE_PROJECT_ID`
+- `REACT_APP_FIREBASE_STORAGE_BUCKET`
+- `REACT_APP_FIREBASE_MESSAGING_SENDER_ID`
+- `REACT_APP_FIREBASE_APP_ID`
+
+### Usage
+
+1. **Sign Up** to create an account.
+2. **Create a New Post** with mathematical expressions and text. The app calculates results inline as you type.
+3. **View Your Profile** to see your posts
+
+## Project Structure
+
+```plaintext
+CalculatorSocial/
+├── src/
+│   ├── components/         # Reusable UI components
+│   ├── providers/          # Context providers (e.g., PostProvider)
+│   ├── pages/              # App pages (Home, Profile, New Post)
+│   ├── App.tsx             # Main app component
+│   ├── main.tsx            # Entry point
+├── .env                    # Environment variables
+├── README.md               # Project documentation
+└── package.json            # Dependencies and scripts
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Contributing
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+Feel free to fork the project and submit pull requests. Contributions are always welcome!
